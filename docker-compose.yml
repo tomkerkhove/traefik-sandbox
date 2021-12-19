@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.5
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "88:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "89:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+  bacon-api:
+    # A container that exposes an API to show its IP address
+    image: ghcr.io/tomkerkhove/bacon-api:latest
+    labels:
+        # Define the path prefix to our service
+      - "traefik.http.routers.bacon.rule=PathPrefix(`/services/food/`)"
+        # Define middleware to strip the path prefix
+      - "traefik.http.middlewares.bacon.stripprefix.prefixes=/services/food"
+        # Link the middleware to our router, if not, it will not work
+      - "traefik.http.routers.bacon.middlewares=bacon"
+    ports:
+      # The HTTP port
+      - "90:80"
