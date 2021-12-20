@@ -24,7 +24,7 @@ bacon-api_1      | Application started. Press Ctrl+C to shut down.
 ### Get bacon
 
 ```bash
-$ curl -i http://127.0.0.1:88/example/api/v1/bacon
+$ curl -i http://127.0.0.1:88/services/food/api/v1/bacon
 HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 Date: Sun, 19 Dec 2021 13:02:22 GMT
